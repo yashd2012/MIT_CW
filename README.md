@@ -1,13 +1,13 @@
 ## GUIDE FOR PYTHON SCRIPTS
 
 ### FOR ALL FOUR CODE FILES: KEY DATA FILES INCLUDE: 
-#### 1) RAW DATA FILES - ALL DATAFRAMES; 
+#### RAW DATA FILES CONTAINING SUPPLY CHAIN DATA - ALL DATAFRAMES; 
   FIELDS (LOCATIONS AND PROPERTIES), 
   REFINERIES (LOCATIONS, CONSUMPTION SLATES), 
   PIPELINES (LOCATIONS AND ATTRIBUTES),
   TERMINALS (LOCATIONS),
-  FUTURE ENERGY SCENARIOS
-#### 2) NETWORK PICKLE OBJECT (CONTAINS NODES AND EDGES OF FIELDS, PIPELINES, REFINERIES, TERMINALS) BASED ON RAW DATA
+#### NETWORK PICKLE OBJECT (CONTAINS NODES AND EDGES OF FIELDS, PIPELINES, REFINERIES, TERMINALS) BASED ON RAW DATA
+
 
 
 #### E.G. IN THE BLEND ESTIMATION ALGORITHM SCRIPT
@@ -133,5 +133,50 @@ opgee_shipping_f2r = ## DATAFRAME OF PATH SPECIFIC SHIPPING EMISSIONS
 .
 
 ```
-#### 4) BLEND ESTIMATION ALGORITHM
+
+
+##### The outputs are saved as a dictionary with keys denoted by the source country, blend and field-to-refinery paths:
+
+```
+.
+.
+.
+                cdict[c][bc][fr]['path']  = frp[c][bc][fr]['path']
+                cdict[c][bc][fr]['vol_bbld']  = frp[c][bc][fr]['bbld']
+                cdict[c][bc][fr]['pipeline_ci_v2'] = pipe_ci_v2
+                cdict[c][bc][fr]['shipping_ci'] = ship_ci
+                cdict[c][bc][fr]['pipeline_distance'] = pipe_dist
+                cdict[c][bc][fr]['shipping_distance'] = ship_dist
+                cdict[c][bc][fr]['total_distance'] = total_dist
+
+    ## SAVE  DICTIONARY OF EMISSIONS ALONG FIELD TO REFINERY PATHS
+    dfilename = "SET_THIS_PATH_" + c + ".p"
+
+    with open(dfilename, 'wb') as fp:
+        pickle.dump(cdict, fp, protocol=pickle.HIGHEST_PROTOCOL)
+
+.
+.
+.
+
+```
+
+#### 4) SCENARIO ANALYSIS
+
+##### Notebook requires the dataframe containing future energy scenarios (E.J/YEAR projections for each decade, SSP scenario and model choice)
+
+```
+df_scenarios = ## DATAFRAME OF SSP SCENARIOS
+
+```
+
+##### Additionally, the outputs from the C.I. computation module are wrangled into a dataframe i.e. the dictionary data structure is unpacked into a tabular structure with a row for every field-to-refinery pathway; group by operations are performed on this dataframe to get different levels of aggregation that are used by the scenario analysis notebook
+
+```
+df_fr_umci = ## DATAFRAME OF CI ORGANIZED FROM FIELD TO REFINERIES
+df_b_umci = ## DATAFRAME OF CI ORGANIZED AT BLEND LEVEL
+df_br_umci =  ## DATAFRAME OF CI ORGANIZED FROM BLEND TO REFINERIES
+
+```
+
 
