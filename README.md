@@ -99,8 +99,39 @@ class country_theta:
 ```
 
 
+#### 3) C.I. COMPUTATION ALONG TRACKED PATHS
 
+##### In addition to the common datasets, the C.I computation script requires the pipeline and shipping C.I. dataframes that contain C.I. values for every pipeline and shipping edge in the network respectively
 
-#### 3) BLEND ESTIMATION ALGORITHM
+```
+coptem_filename = ## DATAFRAME OF SEGMENT SPECIFIC PIPELINE EMISSIONS
+coptem_f2r = pd.read_csv(coptem_filename, index_col=0)
+opgee_shipping_f2r = ## DATAFRAME OF PATH SPECIFIC SHIPPING EMISSIONS
+
+```
+
+##### Loop over field to refinery paths from the previous module to compute C.I. values along source to destination pathways
+
+```
+.
+.
+.
+                    if edge_n1n2['ty']=='kk':
+                        ship_dist += (1609.34)*(edge_n1n2['shipping_distance_v3'])
+                        total_dist += (1609.34)*(edge_n1n2['shipping_distance_v3'])
+                        opgee_shipdf_slice = opgee_shipping_f2r.loc[str((node1, node2)),:]
+                        ship_ci += opgee_shipdf_slice['tantra_gcpmj_final']
+
+                    if edge_n1n2['ty']=='pp1':
+                        pipe_dist += edge_n1n2['actual_distance']
+                        total_dist += edge_n1n2['actual_distance']
+
+                        coptem_f2r_slice = coptem_f2r[((coptem_f2r['crude_name']==bc_corrected)&(coptem_f2r['edge_pairs']==str((node1, node2))))]
+                        pipe_ci_v2 += coptem_f2r_slice['CI_v2_gco2permj'].values[0]
+.
+.
+.
+
+```
 #### 4) BLEND ESTIMATION ALGORITHM
 
